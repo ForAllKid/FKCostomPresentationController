@@ -13,6 +13,7 @@
 		7141F003207362F300C49794 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7141F002207362F300C49794 /* Assets.xcassets */; };
 		7141F006207362F300C49794 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7141F004207362F300C49794 /* LaunchScreen.storyboard */; };
 		7141F009207362F300C49794 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7141F008207362F300C49794 /* main.m */; };
+		7141F0122073642000C49794 /* USGPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7141F0112073641F00C49794 /* USGPresentationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		7141F005207362F300C49794 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7141F007207362F300C49794 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7141F008207362F300C49794 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7141F0102073641F00C49794 /* USGPresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USGPresentationController.h; sourceTree = "<group>"; };
+		7141F0112073641F00C49794 /* USGPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USGPresentationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 		7141EFF8207362F100C49794 /* FKCustomPresentationController */ = {
 			isa = PBXGroup;
 			children = (
+				7141F00F2073641F00C49794 /* FKPresentationController */,
 				7141EFF9207362F100C49794 /* AppDelegate.h */,
 				7141EFFA207362F100C49794 /* AppDelegate.m */,
 				7141EFFC207362F100C49794 /* ViewController.h */,
@@ -69,6 +73,15 @@
 				7141F008207362F300C49794 /* main.m */,
 			);
 			path = FKCustomPresentationController;
+			sourceTree = "<group>";
+		};
+		7141F00F2073641F00C49794 /* FKPresentationController */ = {
+			isa = PBXGroup;
+			children = (
+				7141F0102073641F00C49794 /* USGPresentationController.h */,
+				7141F0112073641F00C49794 /* USGPresentationController.m */,
+			);
+			path = FKPresentationController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7141EFFE207362F100C49794 /* ViewController.m in Sources */,
+				7141F0122073642000C49794 /* USGPresentationController.m in Sources */,
 				7141F009207362F300C49794 /* main.m in Sources */,
 				7141EFFB207362F100C49794 /* AppDelegate.m in Sources */,
 			);
