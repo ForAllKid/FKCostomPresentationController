@@ -8,9 +8,11 @@
 
 #import "ViewController.h"
 #import "NextViewController.h"
+#import "USGPresentationController.h"
 
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *textField;
 
 @end
 
@@ -18,8 +20,38 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    
 }
 
+
+- (IBAction)normalPresent:(UIButton *)sender {
+
+    NextViewController *controller = [NextViewController new];
+    
+    [self customDirectionalPresentViewController:controller animated:YES];
+    
+}
+
+- (IBAction)RoundPresent:(UIButton *)sender {
+
+    CGFloat corner = [self.textField.text floatValue];
+    
+    NextViewController *controller = [NextViewController new];
+    
+    [self customDirectionalPresentViewController:controller cornerRadius:corner animated:YES];
+    
+}
+
+- (IBAction)fadePresent:(UIButton *)sender {
+    
+    NextViewController *controller = [NextViewController new];
+    
+    [self customFadedPresentViewController:controller animated:YES];
+    
+    
+}
 
 
 @end

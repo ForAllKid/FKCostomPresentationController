@@ -16,7 +16,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     // Do any additional setup after loading the view.
+}
+
+- (CGSize)preferredContentSize {
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    return CGSizeMake(screenSize.width, screenSize.height/2.f);
 }
 
 - (void)didReceiveMemoryWarning {
