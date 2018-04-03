@@ -22,7 +22,14 @@
     if (self) {
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        UIBlurEffect *eff = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+        
+        float version = [[UIDevice currentDevice].systemVersion floatValue];
+        
+        UIBlurEffectStyle style = UIBlurEffectStyleExtraLight;
+        if (version > 10.f) {
+            style = UIBlurEffectStyleProminent;
+        }
+        UIBlurEffect *eff = [UIBlurEffect effectWithStyle:style];
         self.effect = eff;
     }
     return self;
