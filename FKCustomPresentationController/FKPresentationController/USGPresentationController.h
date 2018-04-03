@@ -62,7 +62,6 @@ NS_CLASS_AVAILABLE_IOS(8_0) @interface USGPresentationController : UIPresentatio
 
 - (void)customFadedPresentViewController:(__kindof UIViewController *)controller animated:(BOOL)animated;
 
-
 - (void)customPresentViewWithPresentationController:(id<UIViewControllerTransitioningDelegate>)presentationController presentedViewController:(__kindof UIViewController *)controller animated:(BOOL)animated;
 
 @end
