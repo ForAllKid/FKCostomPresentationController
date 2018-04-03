@@ -8,7 +8,7 @@ A custom PresentationController for iOS platform
 
 - easy to use
 
-###How to use:
+### How to use:
 
 
 See Demo Project
@@ -43,14 +43,14 @@ See Demo Project
 
 ```
 
-###Installation
+### Installation
 
 ```
 pod 'FKCustomPresentationController'
 
 ```
 
-###Requirements
+### Requirements
 
 ```
 iOS8 or later
