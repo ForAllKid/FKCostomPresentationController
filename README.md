@@ -1,5 +1,9 @@
 # FKCostomPresentationController
 
+### ScreenShot
+
+![image](https://github.com/ForAllKid/FKCostomPresentationController/FKCustomPresentationControllerScrenShot.gif)
+
 ### Decription
 
 A custom PresentationController for iOS platform
