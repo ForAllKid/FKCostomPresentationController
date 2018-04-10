@@ -18,6 +18,8 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     // Do any additional setup after loading the view.
+    
+    self.preferredContentSize = CGSizeMake(100.f, 100.f);
 }
 
 - (CGSize)preferredContentSize {

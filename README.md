@@ -2,7 +2,7 @@
 
 ### ScreenShot
 
-![image](https://github.com/ForAllKid/FKCostomPresentationController/FKCustomPresentationControllerScrenShot.gif)
+![image](https://github.com/ForAllKid/FKCostomPresentationController/blob/master/FKCustomPresentationControllerScrenShot.gif)
 
 ### Decription
 
@@ -45,6 +45,24 @@ See Demo Project
     [self customFadedPresentViewController:controller animated:YES];
     
 }
+
+```
+
+### Note
+
+If you want to present a view controller which is not full screen (like screenshot shown), you need set the controller's contentSize like '''
+    self.preferredContentSize = CGSizeMake(100.f, 100.f);
+
+'''
+
+or override the function
+
+```
+- (CGSize)preferredContentSize {
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    return CGSizeMake(screenSize.width, screenSize.height/2.f);
+}
+
 
 ```
 
