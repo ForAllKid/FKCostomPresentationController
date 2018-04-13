@@ -7,6 +7,8 @@
 //
 
 #import "NextViewController.h"
+#import "TestViewController.h"
+#import "FKNavigationController.h"
 
 @interface NextViewController ()
 
@@ -16,10 +18,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    // Do any additional setup after loading the view.
-    
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];    
     self.preferredContentSize = CGSizeMake(100.f, 100.f);
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
 }
 
 - (CGSize)preferredContentSize {
@@ -27,19 +28,36 @@
     return CGSizeMake(screenSize.width, screenSize.height/2.f);
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 50;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    cell.textLabel.text = @"Test";
+    return cell;
+    
 }
-*/
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    TestViewController *controller = [TestViewController new];
+
+    if (self.navigationController) {
+        
+        [self.navigationController pushViewController:controller animated:YES];
+        
+    } else {
+        
+        FKNavigationController *nav = [FKNavigationController initWithController:controller];
+        [self presentViewController:nav animated:YES completion:NULL];
+        
+    }
+
+}
+
+
 
 @end
