@@ -48,6 +48,11 @@ See Demo Project
 
 ```
 
+<br/>
+
+> Download or clone to see more use~
+
+
 ### Note
 
 If you want to present a view controller which is not full screen (like screenshot shown), you need set the controller's contentSize like 
@@ -83,6 +88,10 @@ pod 'FKCustomPresentationController'
 ```
 iOS8 or later
 ```
+
+### Next
+
+will support gestureRecognizer control
 
 ### License
 
