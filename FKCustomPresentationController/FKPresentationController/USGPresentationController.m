@@ -95,7 +95,6 @@
         presentedViewController.modalPresentationStyle = UIModalPresentationCustom;
         
         _animationStyle = USGPresentationControllerAnimationStyleFaded;
-        _direction = USGPresentationControllerDirectionUp;
         _animationDuration = 0.35f;
         _userBlurEffect = NO;
     }
@@ -104,10 +103,6 @@
 
 - (void)setAnimationStyle:(USGPresentationControllerAnimationStyle)animationStyle{
     _animationStyle = animationStyle;
-}
-
-- (void)setDirection:(USGPresentationControllerDirection)direction{
-    _direction = direction;
 }
 
 - (void)setAnimationDuration:(NSTimeInterval)animationDuration{

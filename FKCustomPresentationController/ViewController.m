@@ -160,7 +160,7 @@ typedef void(^CellItemHandler)(CellItem *item);
     if (!_groups) {
         
         CellItemGroup *groupOne = [CellItemGroup new];
-        groupOne.title = @"ViewControllerTest";
+        groupOne.title = @"viewControllerTest";
         
         {
             CellItem *one_fade = [CellItem itemWithTitle:@"Fade" handler:^(CellItem *item) {
@@ -194,7 +194,7 @@ typedef void(^CellItemHandler)(CellItem *item);
         
         CellItemGroup *groupOne_Nav = [CellItemGroup new];
         
-        groupOne_Nav.title = @"NavigationControllerTest";
+        groupOne_Nav.title = @"navigationControllerTest";
         
         {
             

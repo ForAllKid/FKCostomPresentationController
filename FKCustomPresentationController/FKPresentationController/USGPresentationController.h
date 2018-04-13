@@ -15,10 +15,6 @@ typedef NS_ENUM(NSInteger, USGPresentationControllerAnimationStyle) {
     USGPresentationControllerAnimationStyleDirection,//弹出
 };
 
-typedef NS_ENUM(NSInteger, USGPresentationControllerDirection) {
-    USGPresentationControllerDirectionUp = 0,//从下面弹出
-    USGPresentationControllerDirectionDown,//从上面弹出
-};
 
 NS_CLASS_AVAILABLE_IOS(8_0) @interface USGPresentationController : UIPresentationController
 <UIViewControllerTransitioningDelegate>
@@ -28,12 +24,6 @@ NS_CLASS_AVAILABLE_IOS(8_0) @interface USGPresentationController : UIPresentatio
  动画风格，默认Faded
  */
 @property (nonatomic) USGPresentationControllerAnimationStyle animationStyle;
-
-/**
- 弹出动画的方向,仅在'animationStyle = BuildCloudPresentationControllerAnimationStyleDirection'有效
- 目前仅支持Up方向
- */
-@property (nonatomic) USGPresentationControllerDirection direction;
 
 /**
  动画时间 默认0.35s
