@@ -3,26 +3,24 @@
 //  USGPresentationController
 //
 //  Created by ForKid on 2017/11/7.
-//  Copyright © 2017 forkid. All rights reserved.
+//  Copyright © 2017年 bottle. All rights reserved.
 //
 
 #import "USGPresentationController.h"
 
 
-@interface USGPresentationControllerBlurView : UIVisualEffectView
+@interface BlurView : UIVisualEffectView
 
 //@property (nonatomic, strong) UIBlurEffect *effect;
 
 @end
 
-@implementation USGPresentationControllerBlurView
+@implementation BlurView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     
     if (self) {
-        
-        
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         UIBlurEffectStyle style = UIBlurEffectStyleExtraLight;
@@ -38,12 +36,12 @@
 
 #pragma mark -
 
-@interface USGPresentationControllerDimmingView : UIControl
+@interface DimmingView : UIControl
 
 
 @end
 
-@implementation USGPresentationControllerDimmingView
+@implementation DimmingView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -59,13 +57,13 @@
 #pragma mark -
 
 
-@interface USGPresentationControllerWrapperView : UIView
+@interface WrapperView : UIView
 
 
 
 @end
 
-@implementation USGPresentationControllerWrapperView
+@implementation WrapperView
 
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -83,9 +81,9 @@
 
 @interface USGPresentationController ()<UIViewControllerAnimatedTransitioning>
 
-@property (nonatomic, strong) USGPresentationControllerDimmingView *dimmingView;
-@property (nonatomic, strong) USGPresentationControllerWrapperView *wrapperView;
-@property (nonatomic, strong) USGPresentationControllerBlurView *blurView;
+@property (nonatomic, strong) DimmingView *dimmingView;
+@property (nonatomic, strong) WrapperView *wrapperView;
+@property (nonatomic, strong) BlurView *blurView;
 
 @end
 
@@ -94,15 +92,11 @@
 - (instancetype)initWithPresentedViewController:(UIViewController *)presentedViewController presentingViewController:(UIViewController *)presentingViewController{
     self = [super initWithPresentedViewController:presentedViewController presentingViewController:presentingViewController];
     if (self) {
-        
         presentedViewController.modalPresentationStyle = UIModalPresentationCustom;
         
         _animationStyle = USGPresentationControllerAnimationStyleFaded;
-        _animationDuration = 1.35f;
+        _animationDuration = 0.35f;
         _userBlurEffect = NO;
-        _roundCornerRadius = 0.f;
-        _fromDirection = USGPresentationControllerDirectionFromDefault;
-        
     }
     return self;
 }
@@ -119,15 +113,11 @@
     _userBlurEffect = userBlurEffect;
 }
 
-- (void)setFromDirection:(USGPresentationControllerDirection)fromDirection {
-    _fromDirection = fromDirection;
-}
-
-- (void)setRoundCornerRadius:(CGFloat)roundCornerRadius {
-    _roundCornerRadius = roundCornerRadius;
-}
-
 - (UIView *)presentedView {
+    /**
+     这个东西很神奇~ 返回了被弹出来控制器的视图，如果重写了的话就是依照这个返回值为准
+     所以在begin方法中调用了[super presentedView]，而不是[self presentedView];
+     */
     return self.wrapperView;
 }
 
@@ -139,29 +129,20 @@
     
     //dimming view
     
-    USGPresentationControllerDimmingView *dimmingView = [[USGPresentationControllerDimmingView alloc] initWithFrame:self.containerView.bounds];
-    
+    DimmingView *dimmingView = [[DimmingView alloc] initWithFrame:self.containerView.bounds];
     dimmingView.alpha = 0.f;
-    
-    [dimmingView addTarget:self
-                    action:@selector(dismissController)
-          forControlEvents:UIControlEventTouchUpInside];
-    
+    [dimmingView addTarget:self action:@selector(dismissController) forControlEvents:UIControlEventTouchUpInside];
     [self.containerView addSubview:dimmingView];
-    
     self.dimmingView = dimmingView;
 
     if (_userBlurEffect) {
-        
-        USGPresentationControllerBlurView *blurView = [[USGPresentationControllerBlurView alloc] initWithFrame:self.containerView.bounds];
+        BlurView *blurView = [[BlurView alloc] initWithFrame:self.containerView.bounds];
         [self.containerView addSubview:blurView];
         self.blurView = blurView;
         dimmingView.backgroundColor = [UIColor clearColor];
-        
     }
     
-    USGPresentationControllerWrapperView *wrapperView = [[USGPresentationControllerWrapperView alloc] initWithFrame:self.frameOfPresentedViewInContainerView];
-    
+    WrapperView *wrapperView = [[WrapperView alloc] initWithFrame:self.frameOfPresentedViewInContainerView];
     presentedView.frame = wrapperView.bounds;
     [wrapperView addSubview:presentedView];
     wrapperView.layer.cornerRadius = self.roundCornerRadius;
@@ -173,7 +154,6 @@
     self.wrapperView = wrapperView;
 
     self.blurView.effect = nil;
-    
     [self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         
         self.blurView.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
@@ -206,9 +186,9 @@
 - (void)dismissalTransitionWillBegin{
     
     [self.presentingViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-      
         self.dimmingView.alpha = 0.f;
         self.blurView.effect = nil;
+
 
     } completion:NULL];
 }
@@ -303,57 +283,37 @@
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext{
 
-
     UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     
+    UIView *fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
+    UIView *toView = [transitionContext viewForKey:UITransitionContextToViewKey];
+    
+    CGRect fromViewFinalFrame   = [transitionContext finalFrameForViewController:fromViewController];
+    
+    CGRect toViewInitialFrame   = [transitionContext initialFrameForViewController:toViewController];
+    CGRect toViewFinalFrame     = [transitionContext finalFrameForViewController:toViewController];
+    
+    
     UIView *containerView = transitionContext.containerView;
+    [containerView addSubview:toView];
     
-    // For a Presentation:
-    //      fromView = The presenting view.
-    //      toView   = The presented view.
-    // For a Dismissal:
-    //      fromView = The presented view.
-    //      toView   = The presenting view.
-    UIView *fromView;
-    UIView *toView;
-    
-    if ([transitionContext respondsToSelector:@selector(viewForKey:)]) {
-        fromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
-        toView = [transitionContext viewForKey:UITransitionContextToViewKey];
-    } else {
-        fromView = fromViewController.view;
-        toView = toViewController.view;
-    }
-    
-    CGRect fromFrame = [transitionContext initialFrameForViewController:fromViewController];
-    CGRect toFrame = [transitionContext finalFrameForViewController:toViewController];
-
+    BOOL isPresenting = (fromViewController == self.presentingViewController);
     BOOL isFaded = self.animationStyle == USGPresentationControllerAnimationStyleFaded;
-    BOOL isPresenting = (toViewController.presentingViewController == fromViewController);
-
+    
     NSTimeInterval animationDuration = [self transitionDuration:transitionContext];
     
+    [containerView addSubview:toView];
     
     if (isFaded) {
 
-        toView.frame = toFrame;
+        toView.alpha = isPresenting ? 0.f : 1.f;
+        toView.frame = toViewFinalFrame;
         
-        if (isPresenting) {
-            toView.alpha = 0.f;
-            toView.layer.shouldRasterize = YES;
-            toView.layer.rasterizationScale = UIScreen.mainScreen.scale;
-            [containerView addSubview:toView];
-        }
-
+        
         [UIView animateWithDuration:animationDuration delay:0 usingSpringWithDamping:1.f initialSpringVelocity:2.f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState animations:^{
             
-            if (isPresenting) {
-                toView.alpha = 1.f;
-            }else {
-                fromView.alpha = 0.f;
-            }
-            
+            toView.alpha = isPresenting ? 1.f : 0.f;
             
         } completion:^(BOOL finished) {
             
@@ -364,91 +324,34 @@
         
     
     }else{
-        
-        CGVector offset;
-        CGFloat delta = isPresenting ? 1.f : -1.f;
-        
-        switch (self.fromDirection) {
-                
-            case USGPresentationControllerDirectionFromTop: {
-    
-                offset = CGVectorMake(0.f, -1.f * delta);
-                
-                break;
-            }
-                
-            case USGPresentationControllerDirectionFromLeft:
-                
-                offset = CGVectorMake(-1.f * delta, 0.f);
-                
-                break;
-                
-            case USGPresentationControllerDirectionFromBottom:
-                
-                offset = CGVectorMake(0.f, 1.f * delta);
 
-                break;
-                
-            case USGPresentationControllerDirectionFromRight:
-                
-                offset = CGVectorMake(1.f *delta, 0.f);
-                
-                break;
-                
-            default:
-                
-                toFrame = CGRectMake(toFrame.origin.x, CGRectGetMaxY(containerView.frame), toFrame.size.width, toFrame.size.height);
-
-                
-                break;
-        }
-        
         if (isPresenting) {
             
-            // For a presentation, the toView starts off-screen and slides in.
-            fromView.frame = fromFrame;
             
-            CGRect initialToFrame = CGRectMake(containerView.frame.size.width * offset.dx,
-                                               toView.frame.size.height * offset.dy,
-                                               containerView.frame.size.width,
-                                               toView.frame.size.height);
+            CGFloat pointY = CGRectGetMaxY(containerView.bounds);
             
-            toView.frame = initialToFrame;
+            toViewInitialFrame.origin = CGPointMake(CGRectGetMinX(containerView.bounds), pointY);
+            toViewInitialFrame.size = toViewFinalFrame.size;
+            toView.frame = toViewInitialFrame;
             
         } else {
-            
-            fromView.frame = fromFrame;
-            toView.frame = toFrame;
+ 
+            CGFloat offsetY = CGRectGetHeight(fromView.frame);
+            fromViewFinalFrame = CGRectOffset(fromView.frame, 0, offsetY);
         }
         
+        NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
         
-        if (isPresenting){
-            [containerView addSubview:toView];
-        }
-        
-        [UIView animateWithDuration:animationDuration animations:^{
-   
-            
-            if (isPresenting) {
-                
-                CGRect finalToFrame = CGRectMake(containerView.frame.size.width * offset.dx,
-                                                 0.f,
-                                                 containerView.frame.size.width,
-                                                 toView.frame.size.height);
-
-                toView.frame = finalToFrame;
-                
-            } else {
-                // For a dismissal, the fromView slides off the screen.
-//                fromView.frame = CGRectOffset(fromFrame, fromFrame.size.width * offset.dx,
-//                                              fromFrame.size.height * offset.dy);
-            }
+        [UIView animateWithDuration:transitionDuration animations:^{
+            if (isPresenting)
+                toView.frame = toViewFinalFrame;
+            else
+                fromView.frame = fromViewFinalFrame;
             
         } completion:^(BOOL finished) {
 
             BOOL wasCancelled = [transitionContext transitionWasCancelled];
             [transitionContext completeTransition:!wasCancelled];
-            
         }];
     
     }
@@ -471,6 +374,8 @@
 }
 
 
+
+
 @end
 
 
@@ -479,73 +384,39 @@
 
 @implementation UIViewController (CustomPresentationController)
 
-- (void)customDirectionalPresentViewController:(__kindof UIViewController *)presentedViewController
-                                      animated:(BOOL)animated{
-
-    [self customDirectionalPresentViewController:presentedViewController
-                                   fromDirection:USGPresentationControllerDirectionFromBottom
-                                        animated:animated];
+- (void)customDirectionalPresentViewController:(__kindof UIViewController *)controller animated:(BOOL)animated{
+    [self customDirectionalPresentViewController:controller cornerRadius:0.f animated:animated];
 }
 
-- (void)customDirectionalPresentViewController:(__kindof UIViewController *)presentedViewController
-                                 fromDirection:(USGPresentationControllerDirection)fromDirection
-                                      animated:(BOOL)animated {
+- (void)customDirectionalPresentViewController:(__kindof UIViewController *)controller cornerRadius:(CGFloat)cornerRadius animated:(BOOL)animated {
     
-    [self _customePresentViewController:presentedViewController
-                         animationStyle:USGPresentationControllerAnimationStyleDirection
-                          fromDirection:fromDirection
-                           cornerRadius:0.f
-                                useBlur:NO
-                               duration:0.35f
-                               animated:animated];
+    USGPresentationController *presentationController = [[USGPresentationController alloc] initWithPresentedViewController:controller presentingViewController:self];
     
-}
-
-- (void)customDirectionalPresentViewController:(__kindof UIViewController *)presentedViewController cornerRadius:(CGFloat)cornerRadius animated:(BOOL)animated {
-
-    [self _customePresentViewController:presentedViewController
-                         animationStyle:USGPresentationControllerAnimationStyleDirection
-                          fromDirection:USGPresentationControllerDirectionFromDefault
-                           cornerRadius:cornerRadius
-                                useBlur:NO
-                               duration:0.35f
-                               animated:animated];
-
-}
-
-
-- (void)customFadedPresentViewController:(__kindof UIViewController *)presentedViewController animated:(BOOL)animated{
-    
-    [self _customePresentViewController:presentedViewController
-                         animationStyle:USGPresentationControllerAnimationStyleFaded
-                          fromDirection:USGPresentationControllerDirectionFromDefault
-                           cornerRadius:0.f
-                                useBlur:NO
-                               duration:0.35f
-                               animated:animated];
-    
-}
-
-
-- (void)_customePresentViewController:(UIViewController *)presentedViewController
-                       animationStyle:(USGPresentationControllerAnimationStyle)animationStyle
-                        fromDirection:(USGPresentationControllerDirection)fromDirection
-                         cornerRadius:(CGFloat)cornerRadius
-                              useBlur:(BOOL)useBlur
-                             duration:(NSTimeInterval)duration
-                             animated:(BOOL)animated{
-    
-    USGPresentationController *presentationController = [[USGPresentationController alloc] initWithPresentedViewController:presentedViewController presentingViewController:self];
-    
-    presentationController.animationStyle    = animationStyle;
-    presentationController.userBlurEffect    = useBlur;
-    presentationController.fromDirection     = fromDirection;
+    presentationController.animationStyle = USGPresentationControllerAnimationStyleDirection;
+    presentationController.userBlurEffect = NO;
     presentationController.roundCornerRadius = cornerRadius;
-    presentationController.animationDuration = duration;
     
-    presentedViewController.transitioningDelegate = presentationController;
-    [self presentViewController:presentedViewController animated:animated completion:NULL];
+    [self customPresentViewWithPresentationController:presentationController presentedViewController:controller animated:animated];
+}
+
+
+- (void)customFadedPresentViewController:(__kindof UIViewController *)controller animated:(BOOL)animated{
     
+    USGPresentationController *presentationController = [[USGPresentationController alloc] initWithPresentedViewController:controller presentingViewController:self];
+    
+    presentationController.animationStyle = USGPresentationControllerAnimationStyleFaded;
+    presentationController.userBlurEffect = NO;
+    
+    [self customPresentViewWithPresentationController:presentationController presentedViewController:controller animated:animated];
+    
+}
+
+
+- (void)customPresentViewWithPresentationController:(id<UIViewControllerTransitioningDelegate>)presentationController presentedViewController:(__kindof UIViewController *)controller animated:(BOOL)animated{
+    
+    controller.transitioningDelegate = presentationController;
+    [self presentViewController:controller animated:animated completion:NULL];
+
 }
 
 @end
