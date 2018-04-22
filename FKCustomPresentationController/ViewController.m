@@ -81,6 +81,8 @@ typedef void(^CellItemHandler)(CellItem *item);
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configUISet];
+    
+    
 }
 
 //MARK: Override
@@ -163,31 +165,38 @@ typedef void(^CellItemHandler)(CellItem *item);
         groupOne.title = @"viewControllerTest";
         
         {
-            CellItem *one_fade = [CellItem itemWithTitle:@"Fade" handler:^(CellItem *item) {
+            CellItem *one_fade = [CellItem itemWithTitle:@"top" handler:^(CellItem *item) {
                 
                 NextViewController *controller = [NextViewController new];
-                [self customFadedPresentViewController:controller animated:YES];
+                [self customDirectionalPresentViewController:controller fromDirection:USGPresentationControllerDirectionFromTop animated:YES];
                 
             }];
             
             
             
-            CellItem *one_Dir = [CellItem itemWithTitle:@"Dir" handler:^(CellItem *item) {
+            CellItem *one_Dir = [CellItem itemWithTitle:@"left" handler:^(CellItem *item) {
                 
                 NextViewController *controller = [NextViewController new];
-                [self customDirectionalPresentViewController:controller animated:YES];
+                [self customDirectionalPresentViewController:controller fromDirection:USGPresentationControllerDirectionFromLeft animated:YES];
                 
             }];
             
             
-            CellItem *one_Dir_Cor = [CellItem itemWithTitle:@"Dir&Corner" handler:^(CellItem *item) {
+            CellItem *one_Dir_Cor = [CellItem itemWithTitle:@"bottom" handler:^(CellItem *item) {
                 
                 NextViewController *controller = [NextViewController new];
-                [self customDirectionalPresentViewController:controller cornerRadius:10.f animated:YES];
+                [self customDirectionalPresentViewController:controller fromDirection:USGPresentationControllerDirectionFromBottom animated:YES];
                 
             }];
             
-            [groupOne.items addObjectsFromArray:@[one_fade, one_Dir, one_Dir_Cor]];
+            CellItem *one_Dir_Cordd = [CellItem itemWithTitle:@"right" handler:^(CellItem *item) {
+                
+                NextViewController *controller = [NextViewController new];
+                [self customDirectionalPresentViewController:controller fromDirection:USGPresentationControllerDirectionFromRight animated:YES];
+                
+            }];
+            
+            [groupOne.items addObjectsFromArray:@[one_fade, one_Dir, one_Dir_Cor, one_Dir_Cordd]];
             
         }
     
